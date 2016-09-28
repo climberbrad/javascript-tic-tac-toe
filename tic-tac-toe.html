@@ -1,0 +1,102 @@
+<html>
+	<head>
+		<style>
+			.board {
+				display: flex;
+				width: 600px;
+				height: 600px;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: flex-start;
+			}
+
+			.square {
+				height: 200px;
+				width: 200px;
+				box-sizing: border-box;
+				border: 5px solid black;
+				font-size: 5em;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.square:hover {
+				cursor: pointer;
+				background-color: #80cd92;
+			}
+
+			#overlay {
+     			visibility: hidden;
+     			position: absolute;
+     			left: 175px;
+     			top: 200px;
+     			width:100%;
+     			height:100%;
+     			text-align:center;
+     			z-index: 1000;
+     			font-size: 5em;
+     			color: red;
+     			display: flex;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="board">
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+		</div>
+
+		<div id="overlay"></div>
+
+		<script type="text/javascript">
+			var PLAYER_1_SYMBOL="X"
+			var PLAYER_2_SYMBOL="O"
+			var currentPlayer = PLAYER_1_SYMBOL
+
+			var board = document.querySelector('.board')
+			board.addEventListener('click', function(e) {
+				e.target.innerHTML = currentPlayer
+				if( checkForWinner() ) {
+					overlay(currentPlayer)
+					// alert(currentPlayer + ' WON!')
+				}
+				currentPlayer = currentPlayer == PLAYER_1_SYMBOL ? PLAYER_2_SYMBOL : PLAYER_1_SYMBOL
+			})
+
+
+			function checkForWinner() {
+				var squares = Array.prototype.slice.call(document.querySelectorAll('.square'), 0);
+				var symbols = squares.map(function(square) {
+						return square.innerHTML
+					})
+					var winningCombos = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+					return winningCombos.find(function(combo) {
+						if(symbols[combo[0]] == symbols[combo[1]] && symbols[combo[1]] == symbols[combo[2]]) {
+							return symbols[combo[0]]
+						} else {
+							return false
+						}
+					})
+			}
+
+			function overlay(player) {
+				el = document.getElementById("overlay");
+				el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+				el.innerHTML = player + " WON!"
+			}
+		</script>
+	</body>
+</html>
+
+
+
+
